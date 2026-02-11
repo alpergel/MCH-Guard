@@ -83,7 +83,7 @@ Each model family includes three variants (M1, M2, M3) representing different fe
 
 **Algorithms**: Cox Proportional Hazards (CoxPH) from lifelines library
 
-**Metrics**: Concordance Index (C-index), AIC (Akaike Information Criterion)
+**Metrics**: Concordance Index (C-index, higher is better), AIC (Akaike Information Criterion, lower is better)
 
 **Outputs**:
 - Trained models: `models/srv_m1_coxph.joblib`, `srv_m2_coxph.joblib`, `srv_m3_coxph.joblib`

@@ -305,7 +305,7 @@ def plot_performance_metrics_panel(ax, data_dict):
             annotations.append((x_pos, y_top, val))
     
     ax.set_ylabel('Score', fontsize=12, fontweight='bold')
-    ax.set_title('Performance Metrics (95% CI)', fontsize=13, fontweight='bold', loc='left')
+    ax.set_title('Performance Metrics (95% CI)', fontsize=13, fontweight='bold', loc='center', pad=20)
     ax.set_xticks(x)
     ax.set_xticklabels(metrics, fontsize=11)
     ax.legend(loc='upper right', frameon=True, framealpha=0.95,
@@ -314,7 +314,14 @@ def plot_performance_metrics_panel(ax, data_dict):
     
     # Add numeric value annotations above CI caps
     y_min, y_max = ax.get_ylim()
-    y_margin = 0.02 * (y_max - y_min)
+    y_margin = 0.05 * (y_max - y_min)  # Increased margin for better spacing
+    
+    # Calculate max annotation height to set appropriate y-limit
+    max_annotation_y = max(y_top + y_margin for _, y_top, _ in annotations)
+    
+    # Set y-limit with extra headroom for annotations (15% extra space above max annotation)
+    ax.set_ylim([y_min, max_annotation_y * 1.15])
+    
     for x_pos, y_top, val in annotations:
         ax.text(x_pos, y_top + y_margin, f"{val:.3f}", ha='center', va='bottom',
                 fontsize=9, fontweight='bold')

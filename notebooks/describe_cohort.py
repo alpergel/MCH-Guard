@@ -378,14 +378,14 @@ class CohortDescriptor:
             if self.group_col:
                 for group in groups:
                     if group in longitudinal_stats:
-                        stats = longitudinal_stats[group]
-                        row1[f'{group}'] = f"{stats['n_with_longitudinal']} ({stats['pct_with_longitudinal']:.1f}%)"
+                        group_stats = longitudinal_stats[group]
+                        row1[f'{group}'] = f"{group_stats['n_with_longitudinal']} ({group_stats['pct_with_longitudinal']:.1f}%)"
                     else:
                         row1[f'{group}'] = "N/A"
             else:
                 if 'Overall' in longitudinal_stats:
-                    stats = longitudinal_stats['Overall']
-                    row1['Overall'] = f"{stats['n_with_longitudinal']} ({stats['pct_with_longitudinal']:.1f}%)"
+                    group_stats = longitudinal_stats['Overall']
+                    row1['Overall'] = f"{group_stats['n_with_longitudinal']} ({group_stats['pct_with_longitudinal']:.1f}%)"
                 else:
                     row1['Overall'] = "N/A"
             
@@ -395,9 +395,9 @@ class CohortDescriptor:
                 contingency_data = []
                 for group in groups:
                     if group in longitudinal_stats:
-                        stats = longitudinal_stats[group]
-                        n_with = int(stats['n_with_longitudinal'])
-                        n_without = int(stats['n_total'] - stats['n_with_longitudinal'])
+                        group_stats = longitudinal_stats[group]
+                        n_with = int(group_stats['n_with_longitudinal'])
+                        n_without = int(group_stats['n_total'] - group_stats['n_with_longitudinal'])
                         contingency_data.append([n_with, n_without])
                     else:
                         # If group not found, use zeros
@@ -458,25 +458,49 @@ class CohortDescriptor:
             }
             if self.group_col:
                 for group in groups:
-                    if group in longitudinal_stats:
-                        stats = longitudinal_stats[group]
-                        row2[f'{group}'] = f"{stats['mean_assessments']:.2f} ± {stats['sd_assessments']:.2f}"
+                    # Find matching key in longitudinal_stats
+                    group_key = None
+                    for key in longitudinal_stats.keys():
+                        try:
+                            if key == group or (hasattr(key, 'item') and key.item() == group) or (hasattr(group, 'item') and group.item() == key):
+                                group_key = key
+                                break
+                        except:
+                            pass
+                    
+                    if group_key is not None:
+                        group_stats = longitudinal_stats[group_key]
+                        row2[f'{group}'] = f"{group_stats['mean_assessments']:.2f} ± {group_stats['sd_assessments']:.2f}"
                     else:
                         row2[f'{group}'] = "N/A"
             else:
                 if 'Overall' in longitudinal_stats:
-                    stats = longitudinal_stats['Overall']
-                    row2['Overall'] = f"{stats['mean_assessments']:.2f} ± {stats['sd_assessments']:.2f}"
+                    group_stats = longitudinal_stats['Overall']
+                    row2['Overall'] = f"{group_stats['mean_assessments']:.2f} ± {group_stats['sd_assessments']:.2f}"
                 else:
                     row2['Overall'] = "N/A"
             
             # Statistical test for number of assessments (t-test or ANOVA)
             if include_stats and self.group_col and len(groups) >= 2:
+                print(f"DEBUG ASSESSMENTS: groups={groups}, longitudinal_stats keys={list(longitudinal_stats.keys())}")
                 group_data_list = []
                 for group in groups:
-                    if group in longitudinal_stats:
-                        stats_dict = longitudinal_stats[group]
-                        assessments = stats_dict.get('longitudinal_assessments', [])
+                    # Find matching key in longitudinal_stats
+                    group_key = None
+                    for key in longitudinal_stats.keys():
+                        # Compare values, handling numpy types
+                        try:
+                            if key == group or (hasattr(key, 'item') and key.item() == group) or (hasattr(group, 'item') and group.item() == key):
+                                group_key = key
+                                break
+                        except:
+                            pass
+                    
+                    print(f"DEBUG ASSESSMENTS: group={group} (type={type(group)}), matched_key={group_key}")
+                    
+                    if group_key is not None:
+                        group_stats = longitudinal_stats[group_key]
+                        assessments = group_stats.get('longitudinal_assessments', [])
                         
                         # Ensure we have a list
                         if not isinstance(assessments, list):
@@ -498,9 +522,13 @@ class CohortDescriptor:
                                 except (ValueError, TypeError):
                                     continue
                         
+                        print(f"DEBUG ASSESSMENTS: group={group}, clean_data length={len(clean_data)}")
+                        
                         # Only add if we have valid data
                         if len(clean_data) > 0:
                             group_data_list.append(clean_data)
+                
+                print(f"DEBUG ASSESSMENTS: Total groups with data={len(group_data_list)}")
                 
                 if len(group_data_list) >= 2:
                     try:
@@ -509,14 +537,18 @@ class CohortDescriptor:
                             statistic, p_val = stats.ttest_ind(group_data_list[0], group_data_list[1], equal_var=False)
                             row2['P-value'] = self._format_p_value(p_val)
                             row2['Test'] = "t-test"
+                            print(f"DEBUG ASSESSMENTS: t-test SUCCESS! p_val={p_val}")
                         else:
                             statistic, p_val = stats.f_oneway(*group_data_list)
                             row2['P-value'] = self._format_p_value(p_val)
                             row2['Test'] = "ANOVA"
+                            print(f"DEBUG ASSESSMENTS: ANOVA SUCCESS! p_val={p_val}")
                     except Exception as e:
+                        print(f"DEBUG ASSESSMENTS: Statistical test FAILED: {e}")
                         row2['P-value'] = "N/A"
                         row2['Test'] = "N/A"
                 else:
+                    print(f"DEBUG ASSESSMENTS: Not enough groups (need >=2, got {len(group_data_list)})")
                     row2['P-value'] = "N/A"
                     row2['Test'] = "N/A"
             else:
@@ -525,22 +557,38 @@ class CohortDescriptor:
             
             results.append(row2)
             
-            # 3. Duration of longitudinal follow-up from baseline (days), mean ± sd
+            # 3. Duration of longitudinal follow-up from baseline (years), mean ± sd
             row3 = {
-                'Variable': 'Duration of longitudinal follow-up from baseline (days), mean ± sd',
+                'Variable': 'Duration of longitudinal follow-up from baseline (years), mean ± sd',
                 'Type': 'Mean ± SD'
             }
             if self.group_col:
                 for group in groups:
-                    if group in longitudinal_stats:
-                        stats = longitudinal_stats[group]
-                        row3[f'{group}'] = f"{stats['mean_followup_days']:.1f} ± {stats['sd_followup_days']:.1f}"
+                    # Find matching key in longitudinal_stats
+                    group_key = None
+                    for key in longitudinal_stats.keys():
+                        try:
+                            if key == group or (hasattr(key, 'item') and key.item() == group) or (hasattr(group, 'item') and group.item() == key):
+                                group_key = key
+                                break
+                        except:
+                            pass
+                    
+                    if group_key is not None:
+                        group_stats = longitudinal_stats[group_key]
+                        # Convert days to years (365.25 days per year)
+                        mean_years = group_stats['mean_followup_days'] / 365.25
+                        sd_years = group_stats['sd_followup_days'] / 365.25
+                        row3[f'{group}'] = f"{mean_years:.2f} ± {sd_years:.2f}"
                     else:
                         row3[f'{group}'] = "N/A"
             else:
                 if 'Overall' in longitudinal_stats:
-                    stats = longitudinal_stats['Overall']
-                    row3['Overall'] = f"{stats['mean_followup_days']:.1f} ± {stats['sd_followup_days']:.1f}"
+                    group_stats = longitudinal_stats['Overall']
+                    # Convert days to years (365.25 days per year)
+                    mean_years = group_stats['mean_followup_days'] / 365.25
+                    sd_years = group_stats['sd_followup_days'] / 365.25
+                    row3['Overall'] = f"{mean_years:.2f} ± {sd_years:.2f}"
                 else:
                     row3['Overall'] = "N/A"
             
@@ -548,9 +596,20 @@ class CohortDescriptor:
             if include_stats and self.group_col and len(groups) >= 2:
                 group_data_list = []
                 for group in groups:
-                    if group in longitudinal_stats:
-                        stats_dict = longitudinal_stats[group]
-                        durations = stats_dict.get('followup_durations', [])
+                    # Find matching key in longitudinal_stats
+                    group_key = None
+                    for key in longitudinal_stats.keys():
+                        # Compare values, handling numpy types
+                        try:
+                            if key == group or (hasattr(key, 'item') and key.item() == group) or (hasattr(group, 'item') and group.item() == key):
+                                group_key = key
+                                break
+                        except:
+                            pass
+                    
+                    if group_key is not None:
+                        group_stats = longitudinal_stats[group_key]
+                        durations = group_stats.get('followup_durations', [])
                         
                         # Ensure we have a list
                         if not isinstance(durations, list):
@@ -561,14 +620,16 @@ class CohortDescriptor:
                             else:
                                 durations = []
                         
-                        # Filter out any None or NaN values and ensure numeric
+                        # Filter out any None or NaN values, ensure numeric, and convert to years
                         clean_data = []
                         for x in durations:
                             if x is not None:
                                 try:
                                     x_val = float(x)
                                     if not (np.isnan(x_val) or np.isinf(x_val)):
-                                        clean_data.append(x_val)
+                                        # Convert days to years
+                                        years_val = x_val / 365.25
+                                        clean_data.append(years_val)
                                 except (ValueError, TypeError):
                                     continue
                         
@@ -607,14 +668,14 @@ class CohortDescriptor:
             if self.group_col:
                 for group in groups:
                     if group in longitudinal_stats:
-                        stats = longitudinal_stats[group]
-                        row4[f'{group}'] = f"{stats['n_mch_after_baseline']} ({stats['pct_mch_after_baseline']:.1f}%)"
+                        group_stats = longitudinal_stats[group]
+                        row4[f'{group}'] = f"{group_stats['n_mch_after_baseline']} ({group_stats['pct_mch_after_baseline']:.1f}%)"
                     else:
                         row4[f'{group}'] = "N/A"
             else:
                 if 'Overall' in longitudinal_stats:
-                    stats = longitudinal_stats['Overall']
-                    row4['Overall'] = f"{stats['n_mch_after_baseline']} ({stats['pct_mch_after_baseline']:.1f}%)"
+                    group_stats = longitudinal_stats['Overall']
+                    row4['Overall'] = f"{group_stats['n_mch_after_baseline']} ({group_stats['pct_mch_after_baseline']:.1f}%)"
                 else:
                     row4['Overall'] = "N/A"
             
@@ -624,9 +685,9 @@ class CohortDescriptor:
                 contingency_data = []
                 for group in groups:
                     if group in longitudinal_stats:
-                        stats = longitudinal_stats[group]
-                        n_with_longitudinal = int(stats['n_with_longitudinal'])
-                        n_mch_after = int(stats['n_mch_after_baseline'])
+                        group_stats = longitudinal_stats[group]
+                        n_with_longitudinal = int(group_stats['n_with_longitudinal'])
+                        n_mch_after = int(group_stats['n_mch_after_baseline'])
                         n_no_mch = n_with_longitudinal - n_mch_after
                         contingency_data.append([n_mch_after, n_no_mch])
                     else:

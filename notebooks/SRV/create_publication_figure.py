@@ -361,19 +361,29 @@ def plot_model_comparison(ax, data_dict):
     # Add value labels with deltas (Δ vs best)
     best_c = max_c
     best_aic = min_aic
+    c_annotations = []
+    aic_annotations = []
+    
     for i, (c, aic) in enumerate(zip(concordances, partial_aics)):
+        c_text_y = c + (max_c - min_c) * 0.05 + 0.002
+        aic_text_y = aic + (max_aic - min_aic) * 0.06 + 5
+        
         ax.text(
             i - width/2,
-            c + (max_c - min_c) * 0.05 + 0.002,
+            c_text_y,
             f"{c:.3f}\nΔ={c - best_c:+.3f}",
             ha='center', va='bottom', fontsize=9, fontweight='bold'
         )
         ax2.text(
             i + width/2,
-            aic + (max_aic - min_aic) * 0.06 + 5,
+            aic_text_y,
             f"{aic:.0f}\nΔ={aic - best_aic:+.0f}",
             ha='center', va='bottom', fontsize=8, fontweight='bold'
         )
+        
+        # Store max annotation positions (approximate height of 2-line text)
+        c_annotations.append(c_text_y + 0.008)  # Add approximate text height
+        aic_annotations.append(aic_text_y + 15)  # Add approximate text height
     
     # Formatting
     ax.set_ylabel('Concordance Index (higher is better)', fontsize=12, fontweight='bold')
@@ -381,11 +391,20 @@ def plot_model_comparison(ax, data_dict):
     ax.set_title('Model Performance Comparison (Δ vs best)', fontsize=13, fontweight='bold', loc='left')
     ax.set_xticks(x)
     ax.set_xticklabels(models, fontsize=11)
-    # Focus on differences & leave headroom
-    c_margin = max(0.02, (max_c - min_c) * 0.35)
-    aic_margin = max(20, (max_aic - min_aic) * 0.35)
-    ax.set_ylim([max(0, min_c - c_margin), min(1.0, max_c + c_margin)])
-    ax2.set_ylim([max(0, min_aic - aic_margin), max_aic + aic_margin])
+    
+    # Calculate dynamic margins based on annotation heights
+    max_c_annotation = max(c_annotations)
+    max_aic_annotation = max(aic_annotations)
+    
+    # Set limits with 8% extra headroom above annotations
+    c_upper = min(1.0, max_c_annotation * 1.08)
+    aic_upper = max_aic_annotation * 1.08
+    
+    c_margin = max(0.02, (max_c - min_c) * 0.25)
+    aic_margin = max(20, (max_aic - min_aic) * 0.25)
+    
+    ax.set_ylim([max(0, min_c - c_margin), c_upper])
+    ax2.set_ylim([max(0, min_aic - aic_margin), aic_upper])
     ax.grid(True, axis='y', alpha=0.2, linestyle='--')
     
     # Legends: show both metrics and model color mapping

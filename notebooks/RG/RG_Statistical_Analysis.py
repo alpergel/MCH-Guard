@@ -1,6 +1,6 @@
 """
 Statistical Analysis for Regression (RG) Model Variants
-Determines if performance differences between m3, medium, and m1 models are statistically significant.
+Determines if performance differences between m3, m2, and m1 models are statistically significant.
 
 This script performs:
 1. Bootstrap resampling to estimate confidence intervals for R², MSE, MAE
@@ -44,7 +44,7 @@ class RGStatisticalAnalysis:
         self.viz_path.mkdir(parents=True, exist_ok=True)
         
         # Model variants
-        self.variants = ['m3', 'medium', 'm1']
+        self.variants = ['m3', 'm2', 'm1']
         self.models = {}
         self.data = {}
         self.predictions = {}
@@ -220,7 +220,7 @@ class RGStatisticalAnalysis:
         test_results = {}
         
         # Compare all pairs
-        pairs = [('m3', 'medium'), ('m3', 'm1'), ('medium', 'm1')]
+        pairs = [('m3', 'm2'), ('m3', 'm1'), ('m2', 'm1')]
         
         for model1, model2 in pairs:
             if model1 not in self.predictions or model2 not in self.predictions:
@@ -277,7 +277,7 @@ class RGStatisticalAnalysis:
         permutation_results = {}
         
         # Compare all pairs
-        pairs = [('m3', 'medium'), ('m3', 'm1'), ('medium', 'm1')]
+        pairs = [('m3', 'm2'), ('m3', 'm1'), ('m2', 'm1')]
         
         for model1, model2 in pairs:
             if model1 not in self.predictions or model2 not in self.predictions:
@@ -302,17 +302,22 @@ class RGStatisticalAnalysis:
             permuted_diffs_rmse = []
             
             for _ in range(n_permutations):
-                # Randomly swap predictions between models
-                swap_mask = np.random.random(len(pred1)) > 0.5
-                pred1_perm = np.where(swap_mask, pred2, pred1)
-                pred2_perm = np.where(swap_mask, pred1, pred2)
+                # For R²: Randomly swap predictions between models
+                swap_mask_r2 = np.random.random(len(pred1)) > 0.5
+                pred1_perm_r2 = np.where(swap_mask_r2, pred2, pred1)
+                pred2_perm_r2 = np.where(swap_mask_r2, pred1, pred2)
                 
-                r2_1_perm = r2_score(y_true, pred1_perm)
-                r2_2_perm = r2_score(y_true, pred2_perm)
+                r2_1_perm = r2_score(y_true, pred1_perm_r2)
+                r2_2_perm = r2_score(y_true, pred2_perm_r2)
                 permuted_diffs_r2.append(r2_1_perm - r2_2_perm)
                 
-                rmse_1_perm = np.sqrt(mean_squared_error(y_true, pred1_perm))
-                rmse_2_perm = np.sqrt(mean_squared_error(y_true, pred2_perm))
+                # For RMSE: Generate independent random permutation
+                swap_mask_rmse = np.random.random(len(pred1)) > 0.5
+                pred1_perm_rmse = np.where(swap_mask_rmse, pred2, pred1)
+                pred2_perm_rmse = np.where(swap_mask_rmse, pred1, pred2)
+                
+                rmse_1_perm = np.sqrt(mean_squared_error(y_true, pred1_perm_rmse))
+                rmse_2_perm = np.sqrt(mean_squared_error(y_true, pred2_perm_rmse))
                 permuted_diffs_rmse.append(rmse_1_perm - rmse_2_perm)
             
             # Calculate p-values
@@ -560,9 +565,9 @@ class RGStatisticalAnalysis:
         
         # Check for overlapping confidence intervals
         ci_overlap = []
-        if 'm3' in bootstrap_results and 'medium' in bootstrap_results:
-            if (bootstrap_results['m3']['r2_ci'][0] <= bootstrap_results['medium']['r2_ci'][1] and
-                bootstrap_results['medium']['r2_ci'][0] <= bootstrap_results['m3']['r2_ci'][1]):
+        if 'm3' in bootstrap_results and 'm2' in bootstrap_results:
+            if (bootstrap_results['m3']['r2_ci'][0] <= bootstrap_results['m2']['r2_ci'][1] and
+                bootstrap_results['m2']['r2_ci'][0] <= bootstrap_results['m3']['r2_ci'][1]):
                 ci_overlap.append("M3 and M2 models have overlapping R² confidence intervals")
         
         if 'm3' in bootstrap_results and 'm1' in bootstrap_results:
@@ -570,9 +575,9 @@ class RGStatisticalAnalysis:
                 bootstrap_results['m1']['r2_ci'][0] <= bootstrap_results['m3']['r2_ci'][1]):
                 ci_overlap.append("M3 and M1 models have overlapping R² confidence intervals")
         
-        if 'medium' in bootstrap_results and 'm1' in bootstrap_results:
-            if (bootstrap_results['medium']['r2_ci'][0] <= bootstrap_results['m1']['r2_ci'][1] and
-                bootstrap_results['m1']['r2_ci'][0] <= bootstrap_results['medium']['r2_ci'][1]):
+        if 'm2' in bootstrap_results and 'm1' in bootstrap_results:
+            if (bootstrap_results['m2']['r2_ci'][0] <= bootstrap_results['m1']['r2_ci'][1] and
+                bootstrap_results['m1']['r2_ci'][0] <= bootstrap_results['m2']['r2_ci'][1]):
                 ci_overlap.append("M2 and M1 models have overlapping R² confidence intervals")
         
         if ci_overlap:

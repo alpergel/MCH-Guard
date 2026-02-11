@@ -324,8 +324,8 @@ def plot_performance_metrics_panel(ax, data_dict):
     
     # Create grouped bar chart
     metrics = ['Accuracy', 'Precision', 'Recall', 'F1-Score', 'ROC-AUC']
-    x = np.arange(len(metrics))
-    width = 0.25
+    x = np.arange(len(metrics)) * 2.2  # Increase spacing between metric groups
+    width = 0.60  # Wider bars for better visibility
     
     annotations = []  # (x_pos, y_top, value)
     for idx, size in enumerate(['M3', 'M2', 'M1']):
@@ -351,13 +351,18 @@ def plot_performance_metrics_panel(ax, data_dict):
     ax.set_xticklabels(metrics, rotation=45, ha='right', fontsize=11)
     ax.legend(loc='lower right', frameon=True, framealpha=0.95,
              edgecolor='black', fontsize=10)
-    ax.set_ylim([0, 1.05])
     ax.grid(True, axis='y', alpha=0.2, linestyle='--')
     ax.axhline(y=0.5, color='red', linestyle='--', alpha=0.3, linewidth=1)
     
     # Add numeric value annotations above CI caps
-    y_min, y_max = ax.get_ylim()
-    y_margin = 0.015 * (y_max - y_min)
+    y_margin = 0.02  # Fixed margin for spacing above error bars
+    
+    # Calculate max annotation height to set appropriate y-limit
+    max_annotation_y = max(y_top + y_margin for _, y_top, _ in annotations)
+    
+    # Set y-limit with extra headroom for annotations (10% extra space above max annotation)
+    ax.set_ylim([0, max_annotation_y * 1.10])
+    
     for x_pos, y_top, val in annotations:
         ax.text(x_pos, y_top + y_margin, f"{val:.3f}", ha='center', va='bottom',
                 fontsize=9, fontweight='bold')

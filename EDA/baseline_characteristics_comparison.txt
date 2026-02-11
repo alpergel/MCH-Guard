@@ -1,0 +1,91 @@
+BASELINE CHARACTERISTICS COMPARISON
+============================================================
+Comparing MCH-positive vs MCH-negative participants at first observation
+
+
+DEMOGRAPHICS:
+-------------
+  PTAGE: MCH-pos 74.2 ± 7.0 vs MCH-neg 71.3 ± 7.3, p < 0.001 *
+  PTGENDER (1.0): MCH-pos 59.1% vs MCH-neg 50.2%, p = 0.0270 *
+  PTEDUCAT: MCH-pos 0.6 ± 0.5 vs MCH-neg 0.7 ± 0.5, p = 0.1828 
+  RACE_ETHNICITY (4): MCH-pos 97.4% vs MCH-neg 96.0%, p = 0.4548 
+
+GENETICS:
+---------
+  e4_GENOTYPE: MCH-pos 0.6 ± 0.7 vs MCH-neg 0.5 ± 0.6, p = 0.0150 *
+
+COGNITIVE SCORES:
+-----------------
+  CDRSB: MCH-pos 0.3 ± 1.2 vs MCH-neg 0.0 ± 1.1, p = 0.0025 *
+  PHC_MEM: MCH-pos -0.2 ± 0.9 vs MCH-neg 0.0 ± 0.9, p < 0.001 *
+  PHC_EXF: MCH-pos -0.2 ± 1.0 vs MCH-neg -0.0 ± 1.0, p = 0.0047 *
+  PHC_LAN: MCH-pos -0.2 ± 1.0 vs MCH-neg 0.0 ± 0.9, p = 0.0025 *
+  DIAGNOSIS: MCH-pos 1.9 ± 0.7 vs MCH-neg 1.8 ± 0.7, p = 0.0115 *
+
+BIOMARKERS:
+-----------
+  ptau_ab_ratio_csf: MCH-pos 0.3 ± 1.2 vs MCH-neg -0.1 ± 0.8, p < 0.001 *
+  PLASMA_NFL: MCH-pos 0.2 ± 0.9 vs MCH-neg -0.1 ± 0.8, p < 0.001 *
+
+IMAGING:
+--------
+  NORM_WMH: MCH-pos 0.2 ± 1.1 vs MCH-neg -0.1 ± 0.9, p < 0.001 *
+  NORM_GRAY: MCH-pos -0.0 ± 1.0 vs MCH-neg 0.1 ± 1.0, p = 0.1956 
+
+CLINICAL MEASURES:
+------------------
+  PHC_BMI: MCH-pos -0.1 ± 0.9 vs MCH-neg 0.1 ± 1.0, p = 0.0187 *
+  PHC_Smoker: MCH-pos 0.4 ± 0.5 vs MCH-neg 0.4 ± 0.5, p = 0.3374 
+
+MEDICAL HISTORY:
+----------------
+  CARD: MCH-pos 0.7 ± 0.4 vs MCH-neg 0.6 ± 0.5, p = 0.0021 *
+  RENA: MCH-pos 0.5 ± 0.5 vs MCH-neg 0.4 ± 0.5, p = 0.0086 *
+  PSYCH: MCH-pos 0.3 ± 0.5 vs MCH-neg 0.4 ± 0.5, p = 0.2222 
+  NEURL: MCH-pos 0.3 ± 0.5 vs MCH-neg 0.3 ± 0.5, p = 0.3637 
+  HEAD: MCH-pos 0.7 ± 0.5 vs MCH-neg 0.6 ± 0.5, p = 0.0916 
+  RESP: MCH-pos 0.2 ± 0.4 vs MCH-neg 0.2 ± 0.4, p = 0.5499 
+  HEPAT: MCH-pos 0.0 ± 0.2 vs MCH-neg 0.0 ± 0.2, p = 0.7529 
+  DERM: MCH-pos 0.3 ± 0.5 vs MCH-neg 0.3 ± 0.5, p = 0.8319 
+  MUSCL: MCH-pos 0.7 ± 0.5 vs MCH-neg 0.7 ± 0.5, p = 0.3315 
+  ENDO: MCH-pos 0.5 ± 0.5 vs MCH-neg 0.4 ± 0.5, p = 0.8238 
+  GAST: MCH-pos 0.5 ± 0.5 vs MCH-neg 0.5 ± 0.5, p = 0.5488 
+  HEMA: MCH-pos 0.1 ± 0.3 vs MCH-neg 0.1 ± 0.3, p = 0.9401 
+  ALLE: MCH-pos 0.5 ± 0.5 vs MCH-neg 0.4 ± 0.5, p = 0.2279 
+  ALCH: MCH-pos 0.0 ± 0.2 vs MCH-neg 0.1 ± 0.2, p = 0.4952 
+
+MEDICATIONS:
+------------
+  MED_Anti_Thrombotic: MCH-pos 0.4 ± 0.5 vs MCH-neg 0.4 ± 0.5, p = 0.1081 
+  MED_AD_and_Dementia: MCH-pos 0.3 ± 0.5 vs MCH-neg 0.2 ± 0.4, p = 0.0291 *
+  MED_Lipid_Lowering: MCH-pos 0.5 ± 0.5 vs MCH-neg 0.4 ± 0.5, p = 0.1089 
+  MED_Blood_Pressure: MCH-pos 0.5 ± 0.5 vs MCH-neg 0.4 ± 0.5, p = 0.0774 
+  MED_Thyroid: MCH-pos 0.2 ± 0.4 vs MCH-neg 0.2 ± 0.4, p = 0.9759 
+  MED_Vitamins/Minerals: MCH-pos 0.7 ± 0.5 vs MCH-neg 0.7 ± 0.5, p = 0.3671 
+  MED_NSAIDs: MCH-pos 0.2 ± 0.4 vs MCH-neg 0.2 ± 0.4, p = 0.3400 
+  MED_Herbal_Supplements: MCH-pos 0.4 ± 0.5 vs MCH-neg 0.4 ± 0.5, p = 0.7492 
+  MED_Analgesics: MCH-pos 0.2 ± 0.4 vs MCH-neg 0.1 ± 0.3, p = 0.3454 
+  MED_Antidepressants: MCH-pos 0.3 ± 0.5 vs MCH-neg 0.2 ± 0.4, p = 0.3120 
+  MED_Diabetes_Oral: MCH-pos 0.1 ± 0.2 vs MCH-neg 0.1 ± 0.3, p = 0.5404 
+  MED_Other_GI: MCH-pos 0.1 ± 0.3 vs MCH-neg 0.1 ± 0.3, p = 0.7823 
+  MED_General_Urological: MCH-pos 0.2 ± 0.4 vs MCH-neg 0.1 ± 0.3, p = 0.0565 
+  MED_Antibiotics: MCH-pos 0.1 ± 0.3 vs MCH-neg 0.1 ± 0.2, p = 0.1025 
+  MED_Osteoporosis: MCH-pos 0.1 ± 0.3 vs MCH-neg 0.1 ± 0.3, p = 0.6670 
+  MED_Inhalers: MCH-pos 0.1 ± 0.2 vs MCH-neg 0.1 ± 0.2, p = 0.6245 
+  MED_Sleep_Aids: MCH-pos 0.1 ± 0.2 vs MCH-neg 0.1 ± 0.3, p = 0.7595 
+  MED_Hormone_Replacement: MCH-pos 0.1 ± 0.3 vs MCH-neg 0.1 ± 0.3, p = 0.7979 
+  MED_GERD/PPI: MCH-pos 0.2 ± 0.4 vs MCH-neg 0.2 ± 0.4, p = 0.8614 
+  MED_Anticonvulsants: MCH-pos 0.0 ± 0.2 vs MCH-neg 0.0 ± 0.2, p = 0.5910 
+  MED_Antihistamines: MCH-pos 0.1 ± 0.3 vs MCH-neg 0.1 ± 0.3, p = 0.7912 
+  MED_H2_Blockers: MCH-pos 0.0 ± 0.2 vs MCH-neg 0.0 ± 0.2, p = 0.8502 
+  MED_Nasal_Sprays: MCH-pos 0.0 ± 0.2 vs MCH-neg 0.0 ± 0.2, p = 0.9049 
+  MED_Diabetes_Injectable: MCH-pos 0.0 ± 0.1 vs MCH-neg 0.0 ± 0.1, p = 0.0931 
+  MED_Corticosteroids: MCH-pos 0.0 ± 0.2 vs MCH-neg 0.0 ± 0.2, p = 0.6487 
+  MED_Benzodiazepines: MCH-pos 0.0 ± 0.2 vs MCH-neg 0.0 ± 0.2, p = 0.8012 
+  MED_Eye_Supplements: MCH-pos 0.0 ± 0.2 vs MCH-neg 0.0 ± 0.1, p = 0.0757 
+  MED_Other_Respiratory: MCH-pos 0.0 ± 0.1 vs MCH-neg 0.0 ± 0.1, p = 1.0000 
+  MED_Antiviral: MCH-pos 0.0 ± 0.2 vs MCH-neg 0.0 ± 0.1, p = 0.5358 
+  MED_Anti_Arrythmia: MCH-pos 0.0 ± 0.1 vs MCH-neg 0.0 ± 0.1, p = 0.8743 
+
+============================================================
+* indicates statistically significant difference (p < 0.05)
